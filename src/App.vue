@@ -30,21 +30,21 @@
           class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
           :class="{ 'bg-slate-700': filter === '' }"
         >
-          ALL - (8)
+          ALL - ({{ todoListLength.all }})
         </button>
         <button
           @click="handleChangeFilter('complete')"
           class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
           :class="{ 'bg-slate-700': filter === 'complete' }"
         >
-          COMPLETE - (2)
+          COMPLETE - ({{ todoListLength.complete }})
         </button>
         <button
           @click="handleChangeFilter('incomplete')"
           class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
           :class="{ 'bg-slate-700': filter === 'incomplete' }"
         >
-          INCOMPLETE - (8)
+          INCOMPLETE - ({{ todoListLength.incomplete }})
         </button>
       </div>
 
@@ -54,7 +54,7 @@
       >
         <!-- Single Todo -->
         <li
-          v-for="todo in handleFilteredTodoList()"
+          v-for="todo in handleFilteredTodoList"
           key="todo.id"
           class="flex items-center justify-between px-4 py-2"
         >
@@ -87,11 +87,13 @@ import { nanoid } from "nanoid";
 export default {
   data() {
     return {
-      todoList: [
-        { id: nanoid(10), title: "Learn React JS", complete: false },
-        { id: nanoid(10), title: "Learn Vue JS", complete: true },
-        { id: nanoid(10), title: "Learn JS", complete: false },
-      ],
+      todoList: localStorage.getItem("todos")
+        ? JSON.parse(localStorage.getItem("todos"))
+        : [
+            { id: nanoid(10), title: "Learn React JS", complete: false },
+            { id: nanoid(10), title: "Learn Vue JS", complete: true },
+            { id: nanoid(10), title: "Learn JS", complete: false },
+          ],
       todoInput: "",
       inputError: "hidden",
       filter: "",
@@ -100,7 +102,6 @@ export default {
 
   methods: {
     handTodoComplete(todoId) {
-      console.log(todoId);
       this.todoList = this.todoList.map((item) =>
         item.id === todoId ? { ...item, complete: !complete } : item
       );
@@ -127,7 +128,9 @@ export default {
     handleChangeFilter(filterValue) {
       this.filter = filterValue;
     },
+  },
 
+  computed: {
     handleFilteredTodoList() {
       const updatedTodoList = this.todoList.filter((todo) => {
         if (this.filter === "complete") {
@@ -139,6 +142,24 @@ export default {
       });
 
       return updatedTodoList;
+    },
+
+    todoListLength() {
+      return {
+        all: this.todoList.length,
+        complete: this.todoList.filter((item) => item.complete).length,
+        incomplete: this.todoList.filter((item) => !item.complete).length,
+      };
+    },
+  },
+
+  watch: {
+    todoList: {
+      handler: (newValue) => {
+        // console.log(newValue);
+        localStorage.setItem("todos", JSON.stringify(newValue));
+      },
+      deep: true,
     },
   },
 };
