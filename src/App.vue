@@ -64,11 +64,10 @@
 
           <div class="flex items-center gap-4">
             <input
-              class="cursor-pointer w-3 h-3 rounded-full bg-slate-800 focus:ring-0 text-slate-200 ring-2 ring-slate-200"
+              class="cursor-pointer w-4 h-4 rounded-full focus:ring-offset-0 focus:ring-0"
               type="checkbox"
               id="complete"
               v-model="todo.complete"
-              @click="handTodoComplete(todo.id)"
             />
 
             <button class="text-sm hover:text-slate-100 text-slate-300">
@@ -103,8 +102,9 @@ export default {
   methods: {
     handTodoComplete(todoId) {
       this.todoList = this.todoList.map((item) =>
-        item.id === todoId ? { ...item, complete: !complete } : item
+        item.id === todoId ? { ...item, complete: !item.complete } : item
       );
+      console.log(this.todoList);
     },
 
     handleTodoCreate() {
