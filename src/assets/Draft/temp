@@ -1,0 +1,45 @@
+<template>
+  <div class="flex items-center w-full gap-5 my-6">
+    <button
+      @click="handleChangeFilter('')"
+      class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
+      :class="filter === '' ? 'bg-slate-700' : ''"
+    >
+      ALL - ({{ todoListLength.all }})
+    </button>
+    <button
+      @click="handleChangeFilter('complete')"
+      class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
+      :class="filter === 'complete' ? 'bg-slate-700' : ''"
+    >
+      COMPLETE - ({{ todoListLength.complete }})
+    </button>
+    <button
+      @click="handleChangeFilter('incomplete')"
+      class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
+      :class="filter === 'incomplete' ? 'bg-slate-700' : ''"
+    >
+      INCOMPLETE - ({{ todoListLength.incomplete }})
+    </button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      filter: "",
+    };
+  },
+
+  methods: {
+    handleChangeFilter(filterValue) {
+      this.filter = filterValue;
+    },
+  },
+
+  props: {
+    todoListLength: Object,
+  },
+};
+</script>
