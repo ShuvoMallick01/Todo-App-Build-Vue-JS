@@ -10,7 +10,18 @@
         :checked="todo.complete"
         @input="() => $emit('complete', todo.id)"
       />
-      <button class="text-sm hover:text-slate-100 text-slate-300">
+
+      <button
+        @click="$emit('editTodo', todo.id)"
+        class="text-sm hover:text-slate-100 text-slate-300"
+      >
+        <i class="fa-regular fa-pen-to-square"></i>
+      </button>
+
+      <button
+        @click="$emit('delete', todo.id)"
+        class="text-sm hover:text-slate-100 text-slate-300"
+      >
         <i class="fa-regular fa-trash-can"></i>
       </button>
     </div>

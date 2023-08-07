@@ -6,6 +6,8 @@
       :key="todo.id"
       :todo="todo"
       @complete="handleComplete($event)"
+      @delete="$emit('delete', $event)"
+      @editTodo="$emit('editTodo', $event)"
     />
   </ul>
 </template>

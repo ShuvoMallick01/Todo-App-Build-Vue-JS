@@ -2,7 +2,10 @@
   <section class="grid h-screen bg-gray-800 text-slate-100 place-items-center">
     <section class="w-full max-w-md m-auto">
       <!-- TODO FORM -->
-      <TodoCreateForm @create="handleTodoCreate($event)" />
+      <TodoCreateForm
+        @create="handleTodoCreate($event)"
+        :todoEditInputTitle="todoEditInputTitle"
+      />
       <p class="mt-2 text-red-500 text-sm" :class="inputError">
         Input filed required!
       </p>
@@ -18,6 +21,8 @@
       <TodoList
         :todoList="handleFilteredTodoList"
         @complete="handleTodoComplete($event)"
+        @delete="handleTodoDelete($event)"
+        @editTodo="handleTodoEditTitle($event)"
       />
     </section>
   </section>
@@ -41,9 +46,10 @@ export default {
             { id: nanoid(10), title: "Learn Vue JS", complete: true },
             { id: nanoid(10), title: "Learn JS", complete: false },
           ],
-
       inputError: "hidden",
       filter: "all",
+      todoEditInputTitle: "",
+      todoEditId: "",
     };
   },
 
@@ -56,12 +62,19 @@ export default {
         this.inputError = "hidden";
       }
 
-      const todo = {
-        id: nanoid(10),
-        title: title,
-        complete: false,
-      };
-      this.todoList.unshift(todo);
+      if (this.todoEditId !== "") {
+        this.todoList = this.todoList.map((item) =>
+          item.id === this.todoEditId ? { ...item, title: title } : item
+        );
+        this.todoEditInputTitle = "";
+      } else {
+        const todo = {
+          id: nanoid(10),
+          title: title,
+          complete: false,
+        };
+        this.todoList.unshift(todo);
+      }
     },
 
     handleTodoComplete(todoId) {
@@ -76,6 +89,12 @@ export default {
 
     handleChangeFilter(filterValue) {
       this.filter = filterValue;
+    },
+
+    handleTodoEditTitle(todoEditId) {
+      this.todoEditId = todoEditId;
+      const editTodo = this.todoList.find((item) => item.id === todoEditId);
+      this.todoEditInputTitle = editTodo.title;
     },
   },
 
@@ -104,7 +123,6 @@ export default {
   watch: {
     todoList: {
       handler: (newValue) => {
-        console.log(newValue);
         localStorage.setItem("todos", JSON.stringify(newValue));
       },
       deep: true,
