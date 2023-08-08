@@ -1,6 +1,9 @@
-# 19-Todo-App-Vue-JS
+# Todo App Using Vuejs Couple of way
 
-This template should help get you started developing with Vue 3 in Vite.
+1. main Branch: Todo App Using Single File (App_v1)
+2. main Branch: Todo App Using Components, local storage with basic funcationality (App_v2_LS, Component_v2_LS)
+3. master Branch: todo App using components, local storage with advance functionality (App_v3_LS, Component_v3_LS)
+4. mastertwo Branch: todo App using components, Json Server with advance functionality (App_v4_LS, Component_v4_LS)
 
 ## Recommended IDE Setup
 
