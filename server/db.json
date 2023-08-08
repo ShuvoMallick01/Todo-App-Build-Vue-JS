@@ -1,19 +1,14 @@
 {
   "todos": [
     {
-      "title": "New todo",
-      "complete": true,
-      "id": 2
-    },
-    {
-      "title": "New Todo",
-      "complete": true,
-      "id": 3
-    },
-    {
-      "title": "New todo",
+      "title": "Learn JS",
       "complete": false,
-      "id": 4
+      "id": 1
+    },
+    {
+      "title": "Learn Vue JS",
+      "complete": false,
+      "id": 2
     }
   ]
 }

@@ -94,6 +94,7 @@ export default {
         })
           .then(() => {
             this.todoList.unshift(todo);
+            this.todoEditInputTitle = "";
           })
           .catch((error) => {
             console.error("Error Creating todo:", error);
