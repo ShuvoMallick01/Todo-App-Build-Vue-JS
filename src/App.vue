@@ -14,7 +14,26 @@
       />
 
       <!-- TODO LIST -->
-      <TodoList :todoList="handleFilteredTodoList" />
+      <div v-if="loading">
+        <div
+          v-for="no in 4"
+          :key="no"
+          class="border border-slate-600 shadow rounded-md p-3 max-w-md w-full mx-auto"
+        >
+          <div class="animate-pulse flex space-x-4">
+            <div class="flex-1 space-y-6 py-1">
+              <div class="h-4 bg-slate-700 rounded"></div>
+            </div>
+            <div class="flex gap-1">
+              <div class="rounded-full bg-slate-700 h-6 w-6"></div>
+              <div class="rounded-full bg-slate-700 h-6 w-6"></div>
+              <div class="rounded-full bg-slate-700 h-6 w-6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <TodoList :todoList="handleFilteredTodoList" v-else />
     </section>
   </section>
 </template>
@@ -24,29 +43,23 @@
 import TodoCreateForm from "./components/TodoCreateForm.vue";
 import TodoFilterAction from "./components/TodoFilterAction.vue";
 import TodoList from "./components/TodoList.vue";
-// Input Plugin
-import { nanoid } from "nanoid";
 
 export default {
   data() {
     return {
-      todoList: localStorage.getItem("todos")
-        ? JSON.parse(localStorage.getItem("todos"))
-        : [
-            { id: nanoid(10), title: "Learn React JS", complete: false },
-            { id: nanoid(10), title: "Learn Vue JS", complete: true },
-            { id: nanoid(10), title: "Learn JS", complete: false },
-          ],
+      todoList: [],
       inputError: "hidden",
       filter: "all",
       todoEditInputTitle: "",
       todoEditId: "",
+      loading: false,
     };
   },
 
   methods: {
-    handleTodoCreate(title) {
-      if (!title) {
+    // CREATE & UPDATE
+    handleTodoCreate(todoTitle) {
+      if (!todoTitle) {
         this.inputError = "visible";
         return;
       } else {
@@ -54,28 +67,67 @@ export default {
       }
 
       if (this.todoEditId !== "") {
-        this.todoList = this.todoList.map((item) =>
-          item.id === this.todoEditId ? { ...item, title: title } : item
-        );
+        const todo = this.todoList.find((item) => item.id === this.todoEditId);
+        todo.title = todoTitle;
+
+        fetch(`http://localhost:8000/todos/${this.todoEditId}`, {
+          method: "PUT",
+          body: JSON.stringify(todo),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
         this.todoEditInputTitle = "";
       } else {
         const todo = {
-          id: nanoid(10),
-          title: title,
+          title: todoTitle,
           complete: false,
         };
-        this.todoList.unshift(todo);
+
+        fetch(`http://localhost:8000/todos`, {
+          method: "POST",
+          body: JSON.stringify(todo),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then(() => {
+            this.todoList.unshift(todo);
+          })
+          .catch((error) => {
+            console.error("Error Creating todo:", error);
+          });
       }
     },
 
+    // COMPLETE
     handleTodoComplete(todoId) {
-      this.todoList = this.todoList.map((item) =>
-        item.id === todoId ? { ...item, complete: !item.complete } : item
-      );
+      const todo = this.todoList.find((item) => item.id === todoId);
+      todo.complete = !todo.complete;
+      console.log(todo);
+
+      fetch(`http://localhost:8000/todos/${todoId}`, {
+        method: "PUT",
+        body: JSON.stringify(todo),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     },
 
+    // DELETE
     handleTodoDelete(todoId) {
-      this.todoList = this.todoList.filter((item) => item.id !== todoId);
+      fetch(`http://localhost:8000/todos/${todoId}`, {
+        method: "DELETE",
+      })
+        .then(() => {
+          // Remove the deleted todo from the todoList array
+          this.todoList = this.todoList.filter((todo) => todo.id !== todoId);
+        })
+        .catch((error) => {
+          console.error("Error deleting todo:", error);
+        });
     },
 
     handleTodoEditTitle(todoEditId) {
@@ -129,6 +181,28 @@ export default {
       handleTodoDelete: this.handleTodoDelete,
       handleTodoEditTitle: this.handleTodoEditTitle,
     };
+  },
+
+  created() {
+    this.loading = true;
+    console.log("Component Created");
+
+    fetch("http://localhost:8000/todos")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((todos) => {
+        this.todoList = todos;
+        this.loading = false;
+        console.log("Todos fetched successfully:", todos);
+      })
+      .catch((error) => {
+        this.loading = false;
+        console.error("Error fetching todos:", error);
+      });
   },
 };
 </script>
