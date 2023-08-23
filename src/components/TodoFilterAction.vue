@@ -1,6 +1,5 @@
 <template>
   <div class="flex items-center w-full gap-5 my-6">
-    <!-- @click="$emit('update:filter', 'all')" -->
     <button
       @click="filter = 'all'"
       class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
@@ -9,7 +8,6 @@
       ALL - ({{ todoListLength.all }})
     </button>
 
-    <!-- @click="$emit('update:filter', 'complete')" -->
     <button
       @click="filter = 'complete'"
       class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
@@ -18,7 +16,6 @@
       COMPLETE - ({{ todoListLength.complete }})
     </button>
 
-    <!-- @click="$emit('update:filter', 'incomplete')" -->
     <button
       @click="filter = 'incomplete'"
       class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
@@ -35,11 +32,6 @@ import { mapState, mapWritableState } from "pinia";
 import { useTodosStore } from "../store/todos-store";
 
 export default {
-  // props: {
-  //   filter: String,
-  //   todoListLength: Object,
-  // },
-
   computed: {
     ...mapWritableState(useTodosStore, ["filter"]),
     ...mapState(useTodosStore, ["todoListLength"]),

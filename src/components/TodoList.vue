@@ -21,10 +21,6 @@ export default {
     ...mapState(useTodosStore, ["handleFilteredTodoList"]),
   },
 
-  props: {
-    // todoList: Object,
-  },
-
   components: {
     TodoListItem,
   },

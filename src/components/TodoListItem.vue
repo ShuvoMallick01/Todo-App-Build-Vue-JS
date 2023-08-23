@@ -42,10 +42,6 @@ export default {
     },
   },
 
-  // computed: {
-  //   ...mapState(useTodosStore, ["todoList"]),
-  // },
-
   methods: {
     ...mapActions(useTodosStore, [
       "handleTodoDelete",
@@ -53,7 +49,5 @@ export default {
       "handleTodoEdit",
     ]),
   },
-
-  // inject: ["handleTodoComplete", "handleTodoDelete", "handleTodoEdit"],
 };
 </script>
