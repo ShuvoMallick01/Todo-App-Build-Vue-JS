@@ -2,38 +2,16 @@
   <section class="grid h-screen bg-gray-800 text-slate-100 place-items-center">
     <section class="w-full max-w-md m-auto">
       <!-- TODO FORM -->
-      <TodoCreateForm :todoEditInputTitle="todoEditInputTitle" />
+      <TodoCreateForm />
       <p class="mt-2 text-red-500 text-sm" :class="inputError">
         Input filed required!
       </p>
 
       <!-- FILTER ACTION -->
-      <TodoFilterAction
-        v-model:filter="filter"
-        :todoListLength="todoListLength"
-      />
+      <TodoFilterAction />
 
       <!-- TODO LIST -->
-      <div v-if="loading">
-        <div
-          v-for="no in 4"
-          :key="no"
-          class="border border-slate-600 shadow rounded-md p-3 max-w-md w-full mx-auto"
-        >
-          <div class="animate-pulse flex space-x-4">
-            <div class="flex-1 space-y-6 py-1">
-              <div class="h-4 bg-slate-700 rounded"></div>
-            </div>
-            <div class="flex gap-1">
-              <div class="rounded-full bg-slate-700 h-6 w-6"></div>
-              <div class="rounded-full bg-slate-700 h-6 w-6"></div>
-              <div class="rounded-full bg-slate-700 h-6 w-6"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <TodoList :todoList="handleFilteredTodoList" v-else />
+      <TodoList />
     </section>
   </section>
 </template>
@@ -44,120 +22,12 @@ import TodoCreateForm from "./components/TodoCreateForm.vue";
 import TodoFilterAction from "./components/TodoFilterAction.vue";
 import TodoList from "./components/TodoList.vue";
 
+import { mapState, mapStores } from "pinia";
+import { useTodosStore } from "./store/todos-store";
+
 export default {
-  data() {
-    return {
-      todoList: [],
-      inputError: "hidden",
-      filter: "all",
-      todoEditInputTitle: "",
-      todoEditId: "",
-      loading: false,
-    };
-  },
-
-  methods: {
-    // CREATE & UPDATE
-    handleTodoCreate(todoTitle) {
-      if (!todoTitle) {
-        this.inputError = "visible";
-        return;
-      } else {
-        this.inputError = "hidden";
-      }
-
-      if (this.todoEditId !== "") {
-        const todo = this.todoList.find((item) => item.id === this.todoEditId);
-        todo.title = todoTitle;
-
-        fetch(`http://localhost:8000/todos/${this.todoEditId}`, {
-          method: "PUT",
-          body: JSON.stringify(todo),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        this.todoEditInputTitle = "";
-      } else {
-        const todo = {
-          title: todoTitle,
-          complete: false,
-        };
-
-        fetch(`http://localhost:8000/todos`, {
-          method: "POST",
-          body: JSON.stringify(todo),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then(() => {
-            this.todoList.unshift(todo);
-            this.todoEditInputTitle = "";
-          })
-          .catch((error) => {
-            console.error("Error Creating todo:", error);
-          });
-      }
-    },
-
-    // COMPLETE
-    handleTodoComplete(todoId) {
-      const todo = this.todoList.find((item) => item.id === todoId);
-      todo.complete = !todo.complete;
-      console.log(todo);
-
-      fetch(`http://localhost:8000/todos/${todoId}`, {
-        method: "PUT",
-        body: JSON.stringify(todo),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    },
-
-    // DELETE
-    handleTodoDelete(todoId) {
-      fetch(`http://localhost:8000/todos/${todoId}`, {
-        method: "DELETE",
-      })
-        .then(() => {
-          // Remove the deleted todo from the todoList array
-          this.todoList = this.todoList.filter((todo) => todo.id !== todoId);
-        })
-        .catch((error) => {
-          console.error("Error deleting todo:", error);
-        });
-    },
-
-    handleTodoEditTitle(todoEditId) {
-      this.todoEditId = todoEditId;
-      const editTodo = this.todoList.find((item) => item.id === todoEditId);
-      this.todoEditInputTitle = editTodo.title;
-    },
-  },
-
   computed: {
-    handleFilteredTodoList() {
-      const updatedTodoList = this.todoList.filter((todo) => {
-        if (this.filter === "complete") {
-          return todo.complete;
-        } else if (this.filter === "incomplete") {
-          return !todo.complete;
-        }
-        return true;
-      });
-      return updatedTodoList;
-    },
-
-    todoListLength() {
-      return {
-        all: this.todoList.length,
-        complete: this.todoList.filter((item) => item.complete).length,
-        incomplete: this.todoList.filter((item) => !item.complete).length,
-      };
-    },
+    ...mapState(useTodosStore, ["inputError", "todoList"]),
   },
 
   watch: {
@@ -173,37 +43,6 @@ export default {
     TodoCreateForm,
     TodoFilterAction,
     TodoList,
-  },
-
-  provide() {
-    return {
-      handleTodoCreate: this.handleTodoCreate,
-      handleTodoComplete: this.handleTodoComplete,
-      handleTodoDelete: this.handleTodoDelete,
-      handleTodoEditTitle: this.handleTodoEditTitle,
-    };
-  },
-
-  created() {
-    this.loading = true;
-    console.log("Component Created");
-
-    fetch("http://localhost:8000/todos")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((todos) => {
-        this.todoList = todos;
-        this.loading = false;
-        console.log("Todos fetched successfully:", todos);
-      })
-      .catch((error) => {
-        this.loading = false;
-        console.error("Error fetching todos:", error);
-      });
   },
 };
 </script>

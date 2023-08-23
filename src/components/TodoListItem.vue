@@ -12,7 +12,7 @@
       />
 
       <button
-        @click="handleTodoEditTitle(todo.id)"
+        @click="handleTodoEdit(todo.id)"
         class="text-sm hover:text-slate-100 text-slate-300"
       >
         <i class="fa-regular fa-pen-to-square"></i>
@@ -30,6 +30,8 @@
 
 <script>
 import { nanoid } from "nanoid";
+import { mapActions, mapState } from "pinia";
+import { useTodosStore } from "../store/todos-store";
 
 export default {
   props: {
@@ -39,6 +41,19 @@ export default {
       required: true,
     },
   },
-  inject: ["handleTodoComplete", "handleTodoDelete", "handleTodoEditTitle"],
+
+  // computed: {
+  //   ...mapState(useTodosStore, ["todoList"]),
+  // },
+
+  methods: {
+    ...mapActions(useTodosStore, [
+      "handleTodoDelete",
+      "handleTodoComplete",
+      "handleTodoEdit",
+    ]),
+  },
+
+  // inject: ["handleTodoComplete", "handleTodoDelete", "handleTodoEdit"],
 };
 </script>

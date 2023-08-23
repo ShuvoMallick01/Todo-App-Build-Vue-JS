@@ -1,15 +1,13 @@
 <template>
-  <form
-    @submit.prevent="handleTodoCreate(todoInput)"
-    class="flex items-center w-full"
-  >
+  <form @submit.prevent="handleTodoCreate" class="flex items-center w-full">
     <input
       type="text"
-      :value="todoEditInputTitle"
-      @input="todoInput = $event.target.value"
       placeholder="Input todo.."
       class="w-full p-3 px-5 placeholder:text-slate-500 bg-transparent border-2 border-gray-500 rounded-l-lg hover:outline-none focus:border-gray-500 focus:ring-0"
+      v-model="todoInput"
     />
+    <!-- :value="todoInput" -->
+    <!-- @input="$emit('update:modelValue', $event.target.value)" -->
 
     <input
       type="submit"
@@ -20,16 +18,21 @@
 </template>
 
 <script>
+import { mapWritableState, mapActions, mapState } from "pinia";
+import { useTodosStore } from "../store/todos-store";
 export default {
-  inject: ["handleTodoCreate"],
-  data() {
-    return {
-      todoInput: "",
-    };
+  // props: {
+  //   modelValue: String,
+  // },
+
+  computed: {
+    ...mapWritableState(useTodosStore, ["todoInput"]),
   },
 
-  props: {
-    todoEditInputTitle: String,
+  methods: {
+    ...mapActions(useTodosStore, ["handleTodoCreate"]),
   },
+
+  // inject: ["handleTodoCreate"],
 };
 </script>
