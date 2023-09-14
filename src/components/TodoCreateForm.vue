@@ -1,16 +1,12 @@
 <template>
-  <form
-    @submit.prevent="handleTodoCreate(todoInput)"
-    class="flex items-center w-full"
-  >
+  <form @submit.prevent="handleSubmit" class="flex items-center w-full">
     <input
       type="text"
       :value="todoEditInputTitle"
-      @input="todoInput = $event.target.value"
+      @input="storeInputValue"
       placeholder="Input todo.."
       class="w-full p-3 px-5 placeholder:text-slate-500 bg-transparent border-2 border-gray-500 rounded-l-lg hover:outline-none focus:border-gray-500 focus:ring-0"
     />
-
     <input
       type="submit"
       value="Add"
@@ -21,7 +17,6 @@
 
 <script>
 export default {
-  inject: ["handleTodoCreate"],
   data() {
     return {
       todoInput: "",
@@ -30,6 +25,16 @@ export default {
 
   props: {
     todoEditInputTitle: String,
+  },
+
+  methods: {
+    storeInputValue(event) {
+      this.todoInput = event.target.value;
+    },
+
+    handleSubmit() {
+      this.$emit("create", this.todoInput);
+    },
   },
 };
 </script>

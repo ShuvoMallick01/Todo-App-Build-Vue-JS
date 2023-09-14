@@ -30,9 +30,9 @@
 
 <!-- FUNTIONALITY -->
 <script>
-import TodoCreateForm from "./components/TodoCreateForm.vue";
-import TodoFilterAction from "./components/TodoFilterAction.vue";
-import TodoList from "./components/TodoList.vue";
+import TodoCreateForm from "../components/TodoCreateForm.vue";
+import TodoFilterAction from "../components/TodoFilterAction.vue";
+import TodoList from "../components/TodoList.vue";
 // Input Plugin
 import { nanoid } from "nanoid";
 
