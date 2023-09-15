@@ -1,13 +1,26 @@
-# Todo App Using Vuejs Couple of way
+# Todo App Using Vuejs + Composition API + Local Storage + V1
 
-1. main Branch: Todo App Using Single File (App_v1)
-2. main Branch: Todo App Using Components, local storage with basic funcationality (App_v2_LS, Component_v2_LS)
-3. master Branch: todo App using components, local storage with advance functionality (App_v3_LS, Component_v3_LS)
-4. mastertwo Branch: todo App using components, Json Server with advance functionality (App_v4_LS, Component_v4_LS)
+Live: https://todo-app-vuejs-option-api-v1.netlify.app/
 
-## Recommended IDE Setup
+Welcome to the Vue.js Option API Todo App project! This lightweight, dynamic todo application leverages Vue.js Option API and the Tailwind CSS framework for a smooth user experience. The app utilizes Local Storage as a database to store your todo list securely.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Features
+
+1. Todo Creation: Easily add new todos by specifying a title.
+
+2. Filter Actions: Enjoy the convenience of three filter action buttons:
+
+   All: View all your todos.
+   Complete: Focus on completed tasks.
+   Incomplete: See your pending todos.
+
+3. Todo Completion: Mark your todos as complete when you've finished them.
+
+4. Todo Editing: Edit existing todos to update their details.
+
+5. Todo Deletion: Remove unwanted todos effortlessly.
+
+6. Database: Local Storage
 
 ## Customize configuration
 
