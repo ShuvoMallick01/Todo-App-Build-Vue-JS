@@ -8,18 +8,18 @@
         type="checkbox"
         :id="todo.id"
         :checked="todo.complete"
-        @input="handleTodoComplete(todo.id)"
+        @input="() => $emit('complete', todo.id)"
       />
 
       <button
-        @click="handleTodoEditTitle(todo.id)"
+        @click="$emit('editTodo', todo.id)"
         class="text-sm hover:text-slate-100 text-slate-300"
       >
         <i class="fa-regular fa-pen-to-square"></i>
       </button>
 
       <button
-        @click="handleTodoDelete(todo.id)"
+        @click="$emit('delete', todo.id)"
         class="text-sm hover:text-slate-100 text-slate-300"
       >
         <i class="fa-regular fa-trash-can"></i>
@@ -39,6 +39,5 @@ export default {
       required: true,
     },
   },
-  inject: ["handleTodoComplete", "handleTodoDelete", "handleTodoEditTitle"],
 };
 </script>

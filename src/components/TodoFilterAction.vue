@@ -1,23 +1,23 @@
 <template>
   <div class="flex items-center w-full gap-5 my-6">
     <button
-      @click="$emit('update:filter', 'all')"
+      @click="$emit('filterEvent', 'all')"
       class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
-      :class="{ 'bg-slate-700': filter === 'all' }"
+      :class="filter === 'all' ? 'bg-slate-700' : ''"
     >
       ALL - ({{ todoListLength.all }})
     </button>
     <button
-      @click="$emit('update:filter', 'complete')"
+      @click="$emit('filterEvent', 'complete')"
       class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
-      :class="{ 'bg-slate-700': filter === 'complete' }"
+      :class="filter === 'complete' ? 'bg-slate-700' : ''"
     >
       COMPLETE - ({{ todoListLength.complete }})
     </button>
     <button
-      @click="$emit('update:filter', 'incomplete')"
+      @click="$emit('filterEvent', 'incomplete')"
       class="flex-1 px-2 py-1 text-xs font-medium border border-gray-500 rounded-lg"
-      :class="{ 'bg-slate-700': filter === 'incomplete' }"
+      :class="filter === 'incomplete' ? 'bg-slate-700' : ''"
     >
       INCOMPLETE - ({{ todoListLength.incomplete }})
     </button>
@@ -26,9 +26,13 @@
 
 <script>
 export default {
-  props: {
-    filter: String,
-    todoListLength: Object,
+  data() {
+    return {};
   },
+  props: {
+    todoListLength: Object,
+    filter: String,
+  },
+  methods: {},
 };
 </script>
