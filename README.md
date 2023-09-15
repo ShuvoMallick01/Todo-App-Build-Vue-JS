@@ -1,4 +1,4 @@
-# Todo App Using Vuejs + Composition API + Local Storage + V1
+# Todo App Using Vuejs Option API + Local Storage - V1
 
 Live: https://todo-app-vuejs-option-api-v1.netlify.app/
 
