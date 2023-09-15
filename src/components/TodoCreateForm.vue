@@ -21,12 +21,13 @@
 
 <script>
 export default {
-  inject: ["handleTodoCreate"],
   data() {
     return {
       todoInput: "",
     };
   },
+
+  inject: ["handleTodoCreate"],
 
   props: {
     todoEditInputTitle: String,
