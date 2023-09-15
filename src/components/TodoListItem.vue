@@ -12,7 +12,7 @@
       />
 
       <button
-        @click="handleTodoEditTitle(todo.id)"
+        @click="handleTodoEditTitle(todo)"
         class="text-sm hover:text-slate-100 text-slate-300"
       >
         <i class="fa-regular fa-pen-to-square"></i>
@@ -39,6 +39,7 @@ export default {
       required: true,
     },
   },
+
   inject: ["handleTodoComplete", "handleTodoDelete", "handleTodoEditTitle"],
 };
 </script>

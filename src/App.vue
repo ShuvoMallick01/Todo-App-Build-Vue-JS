@@ -2,7 +2,8 @@
   <section class="grid h-screen bg-gray-800 text-slate-100 place-items-center">
     <section class="w-full max-w-md m-auto">
       <!-- TODO FORM -->
-      <TodoCreateForm :todoEditInputTitle="todoEditInputTitle" />
+      <TodoCreateForm v-model="todoInput" />
+
       <p class="mt-2 text-red-500 text-sm" :class="inputError">
         Input filed required!
       </p>
@@ -40,6 +41,7 @@
 
 <!-- FUNTIONALITY -->
 <script>
+import { computed } from "vue";
 import TodoCreateForm from "./components/TodoCreateForm.vue";
 import TodoFilterAction from "./components/TodoFilterAction.vue";
 import TodoList from "./components/TodoList.vue";
@@ -50,25 +52,25 @@ export default {
       todoList: [],
       inputError: "hidden",
       filter: "all",
-      todoEditInputTitle: "",
-      todoEditId: "",
+      todoEditId: null,
       loading: false,
+      todoInput: "",
     };
   },
 
   methods: {
-    // CREATE & UPDATE
+    // CREATE & EDIT
     handleTodoCreate(todoTitle) {
-      if (!todoTitle) {
+      if (!this.todoInput) {
         this.inputError = "visible";
         return;
       } else {
         this.inputError = "hidden";
       }
 
-      if (this.todoEditId !== "") {
+      if (this.todoEditId) {
         const todo = this.todoList.find((item) => item.id === this.todoEditId);
-        todo.title = todoTitle;
+        todo.title = this.todoInput;
 
         fetch(`http://localhost:8000/todos/${this.todoEditId}`, {
           method: "PUT",
@@ -78,12 +80,14 @@ export default {
           },
         });
 
-        this.todoEditInputTitle = "";
+        this.todoInput = "";
       } else {
         const todo = {
-          title: todoTitle,
+          title: this.todoInput,
           complete: false,
         };
+
+        console.log(todo.title);
 
         fetch(`http://localhost:8000/todos`, {
           method: "POST",
@@ -94,12 +98,12 @@ export default {
         })
           .then(() => {
             this.todoList.unshift(todo);
-            this.todoEditInputTitle = "";
           })
           .catch((error) => {
             console.error("Error Creating todo:", error);
           });
       }
+      this.todoInput = "";
     },
 
     // COMPLETE
@@ -131,10 +135,10 @@ export default {
         });
     },
 
-    handleTodoEditTitle(todoEditId) {
-      this.todoEditId = todoEditId;
-      const editTodo = this.todoList.find((item) => item.id === todoEditId);
-      this.todoEditInputTitle = editTodo.title;
+    // EDIT
+    handleTodoEditTitle(todoId) {
+      this.todoEditId = todoId.id;
+      this.todoInput = todoId.title;
     },
   },
 
@@ -181,6 +185,7 @@ export default {
       handleTodoComplete: this.handleTodoComplete,
       handleTodoDelete: this.handleTodoDelete,
       handleTodoEditTitle: this.handleTodoEditTitle,
+      todoList: computed(() => this.todoList),
     };
   },
 
@@ -198,7 +203,6 @@ export default {
       .then((todos) => {
         this.todoList = todos;
         this.loading = false;
-        console.log("Todos fetched successfully:", todos);
       })
       .catch((error) => {
         this.loading = false;

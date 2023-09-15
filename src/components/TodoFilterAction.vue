@@ -22,6 +22,8 @@
       INCOMPLETE - ({{ todoListLength.incomplete }})
     </button>
   </div>
+
+  {{ JSON.stringify(todoList) }}
 </template>
 
 <script>
@@ -30,5 +32,6 @@ export default {
     filter: String,
     todoListLength: Object,
   },
+  inject: ["todoList"],
 };
 </script>
