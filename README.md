@@ -1,4 +1,4 @@
-# Todo App Using Vuejs Option Api + Json Server
+# Todo App Using Vuejs OPTION API + JSON SERVER
 
 Live: https://todo-list-vuejs-using-json-server.netlify.app
 
