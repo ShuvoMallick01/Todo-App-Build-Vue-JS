@@ -24,15 +24,18 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {};
+<!-- FUNCTIONALITY -->
+<script setup>
+let props = defineProps({
+  todoListLength: {
+    type: Object,
+    required: true,
+    default: {},
   },
-  props: {
-    todoListLength: Object,
-    filter: String,
+
+  filter: {
+    type: String,
+    required: true,
   },
-  methods: {},
-};
+});
 </script>

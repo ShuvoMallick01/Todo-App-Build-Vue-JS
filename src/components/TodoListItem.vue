@@ -28,16 +28,15 @@
   </li>
 </template>
 
-<script>
+<script setup>
 import { nanoid } from "nanoid";
+const emit = defineEmits(["delete"]);
 
-export default {
-  props: {
-    todo: {
-      type: Object,
-      default: { id: nanoid(10), title: "Learn React JS", complete: false },
-      required: true,
-    },
+const props = defineProps({
+  todo: {
+    type: Object,
+    default: { id: nanoid(10), title: "Learn React JS", complete: false },
+    required: true,
   },
-};
+});
 </script>

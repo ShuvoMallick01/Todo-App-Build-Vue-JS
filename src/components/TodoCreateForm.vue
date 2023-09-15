@@ -1,12 +1,13 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="flex items-center w-full">
+  <form @submit.prevent="handleTodoCreate" class="flex items-center w-full">
     <input
       type="text"
-      :value="todoEditInputTitle"
-      @input="storeInputValue"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
       placeholder="Input todo.."
       class="w-full p-3 px-5 placeholder:text-slate-500 bg-transparent border-2 border-gray-500 rounded-l-lg hover:outline-none focus:border-gray-500 focus:ring-0"
     />
+
     <input
       type="submit"
       value="Add"
@@ -15,26 +16,8 @@
   </form>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      todoInput: "",
-    };
-  },
-
-  props: {
-    todoEditInputTitle: String,
-  },
-
-  methods: {
-    storeInputValue(event) {
-      this.todoInput = event.target.value;
-    },
-
-    handleSubmit() {
-      this.$emit("create", this.todoInput);
-    },
-  },
-};
+<!-- FUNCTIONALITY -->
+<script setup>
+let props = defineProps(["modelValue", "handleTodoCreate"]);
+let emits = defineEmits(["update:modelValue"]);
 </script>

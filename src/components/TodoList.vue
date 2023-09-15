@@ -12,22 +12,21 @@
   </ul>
 </template>
 
-<script>
+<script setup>
 import TodoListItem from "./TodoListItem.vue";
+import { defineProps } from "vue";
 
-export default {
-  props: {
-    todoList: Object,
-  },
+const emit = defineEmits(["complete"]);
 
-  methods: {
-    handleComplete(e) {
-      this.$emit("complete", e);
-    },
+const props = defineProps({
+  todoList: {
+    type: Array,
+    required: true,
+    default: [],
   },
+});
 
-  components: {
-    TodoListItem,
-  },
+const handleComplete = (e) => {
+  emit("complete", e);
 };
 </script>
