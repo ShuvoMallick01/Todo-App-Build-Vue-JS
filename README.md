@@ -1,6 +1,6 @@
 # Todo App using Vue.js Composition API & Local Storage
 
-Live: https://todo-app-vuejs-ls-compositionapi.netlify.app/
+Live: https://todo-app-vuejs-ls-composition-api.netlify.app/
 
 Welcome to the Vue.js Composition API Todo App project! This lightweight, dynamic todo application leverages Vue.js Composition API and the Tailwind CSS framework for a smooth user experience. The app utilizes Local Storage as a database to store your todo list securely.
 
